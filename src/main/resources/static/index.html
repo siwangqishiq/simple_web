@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>App测试</title>
+    <style>
+        #main{
+            width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        img{display: block;}
+        .qrcode{
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .download{
+            font-size: 30px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            display: block;
+            width: 300px;
+        }
+        .dev{
+            font-size: 30px;
+            color: tomato;
+            margin-left: auto;
+            margin-right: auto;
+            width: 300px;
+            text-align: center;
+        }
+        .style_bl{
+            display: block;
+            margin-top: 18px;
+        }
+    </style>
+</head>
+<body>
+<div id="main">
+    <h2>Test</h2>
+    <input id="btn1" type="button" value="Test" class="style_bl" />
+    <input id="btn2" type="button" value="显示toast" class="style_bl" />
+    <input id="btn3" type="button" value="获取Sign Info" class="style_bl" />
+    <input id="btn4" type="button" value="关闭Webview" class="style_bl" />
+    <span id="content"> </span>
+</div>
+<script>
+//js -> flutter
+document.getElementById("btn1").onclick = function(){
+    var call = {method:"test" , data:"Hello from javascript" , cid:"123456"};
+    jsbridge.postMessage(JSON.stringify(call));
+}
+
+// show a toast
+document.getElementById("btn2").onclick = function(){
+    var call = {method:"toast" , data:"Hello from javascript 来自js" , cid:"123"};
+    jsbridge.postMessage(JSON.stringify(call));
+}
+
+// get sign
+document.getElementById("btn3").onclick = function(){
+    console.log("test3 button click");
+    var reqData = "Hello 你好 世界";
+    var call = {method:"get_sign_info" , data: reqData};
+    jsbridge.postMessage(JSON.stringify(call));
+}
+
+document.getElementById("btn4").onclick = function(){
+    console.log("test4 button click");
+    var reqData = "Hello 你好 世界";
+    var call = {method:"close_webview" , data: null , cid:"131415926"};
+    jsbridge.postMessage(JSON.stringify(call));
+}
+
+// flutter -> js
+function onMessageFromNative(message){
+    console.log(message);
+    
+    //var response = JSON.parse(message);
+    var response = message;
+    var method = response["method"];
+    var cid = response["cid"];
+    console.log("method = " + method +"  , cid = " + cid);
+
+    switch(method){
+        case "test":
+        console.log("test method return");
+        break;
+        
+        case "toast":
+        console.log(response.data);
+        break;
+
+        case "get_sign_info":
+        console.log(response.data);
+        displaySignInfo(response.data);
+        break;
+    }//end switch
+}
+
+function displaySignInfo(info){
+    document.getElementById("content").innerHTML=info;
+}
+
+</script>
+</body>
+</html>
