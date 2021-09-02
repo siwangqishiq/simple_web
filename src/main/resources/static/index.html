@@ -43,6 +43,13 @@
     <input id="btn2" type="button" value="显示toast" class="style_bl" />
     <input id="btn3" type="button" value="获取Sign Info" class="style_bl" />
     <input id="btn4" type="button" value="关闭Webview" class="style_bl" />
+
+    <input id="btn5" type="button" value="发布房产信息" class="style_bl" />
+    <input id="btn6" type="button" value="隐藏返回按钮" class="style_bl" />
+    <input id="btn7" type="button" value="显示返回按钮" class="style_bl" />
+
+    <input id="btn8" type="button" value="右侧自定义按钮" class="style_bl" />
+    <input id="btn9" type="button" value="清理右侧自定义按钮" class="style_bl" />
     <span id="content"> </span>
 </div>
 <script>
@@ -72,6 +79,46 @@ document.getElementById("btn4").onclick = function(){
     var call = {method:"close_webview" , data: null , cid:"131415926"};
     jsbridge.postMessage(JSON.stringify(call));
 }
+
+document.getElementById("btn5").onclick = function(){
+    console.log("test5 发布房产信息");
+    var content = "这是Js 发布的一个房产信息";
+    var call = {method:"postHouse" , data: {"body": content} , cid:"131415926"};
+    jsbridge.postMessage(JSON.stringify(call));
+}
+
+document.getElementById("btn6").onclick = function(){
+    console.log("隐藏返回按钮");
+    var call = {method:"hideBackBtn" , data: 1 , cid:"1314159261111"};
+    jsbridge.postMessage(JSON.stringify(call));
+}
+
+document.getElementById("btn7").onclick = function(){
+    console.log("显示返回按钮");
+    var call = {method:"hideBackBtn" , data: 0 , cid:"1314159261111"};
+    jsbridge.postMessage(JSON.stringify(call));
+}
+
+document.getElementById("btn8").onclick = function(){
+    console.log("自定义按钮");
+    var call = {method:"rightButton" , data: {text: '你好世界 点我一下吧',
+        color: '0x00ff0000',type: 'God bless you',
+        callBack: 'rightButtonClick'} , cid:"yyyy-wwww"};
+    jsbridge.postMessage(JSON.stringify(call));
+}
+
+document.getElementById("btn9").onclick = function(){
+    console.log("清理自定义按钮");
+    var call = {method:"rightButton" , data: null , cid:"yyyy-wwww"};
+    jsbridge.postMessage(JSON.stringify(call));
+}
+
+function rightButtonClick(data){
+    console.log("rightButtonClick");
+    console.log(data);
+    displaySignInfo(data);
+}
+
 
 // flutter -> js
 function onMessageFromNative(message){
